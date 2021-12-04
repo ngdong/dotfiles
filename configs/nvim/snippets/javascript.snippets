@@ -1,0 +1,31 @@
+snippet rsc "React stateless component" b
+  import React from 'react';
+  import PropTypes from 'prop-types';
+
+  function ${1:component-name}(${2:#:props}) {
+    return (
+      ${3}
+    );
+  }
+
+  $1.propTypes = {
+    ${4}
+  };
+
+  export default $1;
+endsnippet
+
+snippet rh "React function component" b
+import React from 'react';
+
+interface ${1:#:props}Props {
+  
+}
+
+export const ${2:component-name}: React.FC<$1Props> = ({}) {
+  return (
+    ${3}
+  );
+}
+
+endsnippet

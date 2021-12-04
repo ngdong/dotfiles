@@ -1,0 +1,43 @@
+{
+  "suggest.echodocSupport": true,
+  "suggest.maxCompleteItemCount": 20,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript",
+    "javascriptreact",
+    "json",
+    "typescript",
+    "typescript.tsx",
+    "typescriptreact"
+  ],
+  "eslint.autoFixOnSave": true,
+  "diagnostic.errorSign": "•",
+  "diagnostic.warningSign": "•",
+  "diagnostic.infoSign": "•",
+  "rest-client.enable": true,
+  "rest-client.showHeaders": true,
+  "snippets.userSnippetsDirectory": "~/.config/nvim/snippets",
+  "snippets.extends": {
+    "javascript": ["javascript"],
+    "typescript": ["javascript"],
+    "javascriptreact": ["javascript"],
+    "typescriptreact": ["javascript"]
+  },
+  "cSpell.userWords": [
+    "Bson",
+    "Chakra",
+    "Formik",
+    "Rustacean",
+    "Rustaceans",
+    "Structs",
+    "antd",
+    "deallocated",
+    "firestore",
+    "libphonenumber",
+    "postgres",
+    "println",
+    "reduxjs",
+    "struct",
+    "typeorm",
+    "waitlist"
+  ]
+}
