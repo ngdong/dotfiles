@@ -4,15 +4,21 @@
 if [ -x "$(command -v nvim)" ]; then
   exit 0
 fi
+
 # Installing neovim
+sudo add-apt-repository ppa:neovim-ppa/unstable
+sudo apt-get update
 sudo apt-get install -y neovim
+
 # Installing Python NeoVim client
 if ! [ -x "$(command -v python3)" ]; then
   sudo apt -y install python3
 fi
+
 if ! [ -x "$(command -v pip3)" ]; then
   sudo apt -y install python3-pip
 fi
+# Installing python neovim package
 pip3 install neovim
 
 # Installing node neovim package
@@ -23,6 +29,14 @@ pip3 install vim-vint
 
 # Installing bash language server
 npm i -g bash-language-server
+
+# Installing fonts
+git clone https://github.com/terroo/fonts.git
+cd fonts/fonts && cp *.ttf *.otf $HOME/.local/share/fonts/
+fc-cache -fv
+
+# Installing sqlite
+sudo apt-get install sqlite3 libsqlite3-dev
 
 # Creating backup directory.
 mkdir -p $PWD/backup
@@ -42,35 +56,15 @@ for filename in "${files[@]}"; do
   fi
 done
 
-# Creating nvim config directory.
+# Remove old config
 if [ -d "$HOME/.config/nvim" ]
 then
-  echo "$(tput setaf 3)Config directory already exists... Skipping.$(tput sgr 0)"
-else
-  mkdir -p "$HOME/.config/nvim"
+  rm -rf ~/.config/nvim
 fi
-# Linking dotfiles
-for config in $PWD/configs/nvim/*; do
-  target=$HOME/.config/nvim/$( basename $config )
-  if [ -e $target ]; then
-    echo "---------------------------------------------------------"
-    echo "$(tput setaf 3)Install: ~${target#$HOME} already exists... Skipping.$(tput sgr 0)"
-    echo "---------------------------------------------------------"
-  else
-    echo "---------------------------------------------------------"
-    echo "$(tput setaf 2)Install: Creating symlink for ${config}.$(tput sgr 0)"
-    echo "---------------------------------------------------------"
-    ln -s $config $target
-  fi
-done
-
-# Creating backup directory
-if [ -d "$HOME/.local/share/nvim/backup" ]
+if [ -d "$HOME/.local/share/nvim" ]
 then
-  echo "$(tput setaf 3)Backup directory already exists... Skipping.$(tput sgr 0)"
-else
-  mkdir -p "$HOME/.local/share/nvim/backup"
+  rm -rf ~/.local/share/nvim
 fi
-# Installing Neovim plugins
-nvim +PlugInstall +qall
-nvim +UpdateRemotePlugins +qall
+
+# Linking dotfiles
+ln -s $PWD/configs/nvim ~/.config/

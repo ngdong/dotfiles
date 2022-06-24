@@ -39,6 +39,7 @@ sudo apt-get install -y gnome-tweak-tool
 sudo apt-get install -y chrome-gnome-shell
 sudo apt-get install -y gnome-shell-extension-pixelsaver
 gnome-extensions enable pixel-saver@deadalnix.me
+gsettings set org.gnome.Terminal.Legacy.Settings headerbar false
 
 mkdir -p ~/.local/share/gnome-shell/extensions
 # CoverflowAltTab
