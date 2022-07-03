@@ -64,7 +64,7 @@ function M.setup()
         vim.g.tokyonight_italic_functions = true
         vim.g.tokyonight_sidebars = { "qf", "vista_kind", "terminal", "packer" }
         vim.g.tokyonight_colors = { hint = "orange", error = "#ff0000" }
-        vim.cmd[[colorscheme tokyonight]]
+        vim.cmd [[colorscheme tokyonight]]
       end
     }
 
@@ -138,7 +138,12 @@ function M.setup()
     }
 
     -- A search panel for neovim.
-    use { "windwp/nvim-spectre" }
+    use {
+      "windwp/nvim-spectre",
+      config = function()
+        require("configs.spectre").setup()
+      end
+    }
 
     -- Buffer line
     use {
@@ -210,7 +215,7 @@ function M.setup()
       "kkoomen/vim-doge",
       run = ":call doge#install()",
       config = function()
-       require("configs.doge").setup()
+        require("configs.doge").setup()
       end,
       cmd = { "DogeGenerate", "DogeCreateDocStandard" }
     }
@@ -457,6 +462,9 @@ function M.setup()
     -- Performance
     use { "dstein64/vim-startuptime", cmd = "StartupTime" }
     use { "nathom/filetype.nvim" }
+
+    -- Testing
+    use { "diepm/vim-rest-console", ft = { "rest" } }
 
     if packer_bootstrap then
       print "Setting up Neovim. Restart required after installation!"

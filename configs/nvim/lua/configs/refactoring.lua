@@ -15,7 +15,6 @@ function M.setup()
       java = true,
     },
   }
-  require("telescope").load_extension "refactoring"
 end
 
 return M
