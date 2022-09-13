@@ -78,16 +78,6 @@ function M.setup()
 
     -- Git
     use {
-      "lewis6991/gitsigns.nvim",
-      requires = {
-        "nvim-lua/plenary.nvim"
-      },
-      config = function()
-        require("configs.gitsigns").setup()
-      end
-    }
-    use { "rhysd/conflict-marker.vim" }
-    use {
       'TimUntersberger/neogit',
       requires = {
         "nvim-lua/plenary.nvim"
@@ -96,7 +86,28 @@ function M.setup()
         require("neogit").setup()
       end
     }
-
+    use {
+      "lewis6991/gitsigns.nvim",
+      requires = {
+        "nvim-lua/plenary.nvim"
+      },
+      config = function()
+        require("configs.gitsigns").setup()
+      end
+    }
+    use {
+      "tpope/vim-fugitive",
+      opt = true,
+      cmd = { "Git", "GBrowse", "Gdiffsplit", "Gvdiffsplit" },
+      requires = { "tpope/vim-rhubarb", "idanarye/vim-merginal" },
+    }
+    use {
+      "akinsho/git-conflict.nvim",
+      tag = "*",
+      config = function()
+        require("configs.git-conflict").setup()
+      end
+    }
     -- Which key
     use {
       "folke/which-key.nvim",

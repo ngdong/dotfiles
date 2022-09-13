@@ -89,6 +89,9 @@ function M.setup()
     ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
     ["/"] = { '<cmd>lua require("Comment.api").toggle_current_linewise()<CR>', "Comment" },
     ["m"] = { '<cmd>lua FixWhitespace<CR>', "Fix Whitespace" },
+    ["1"] = { '<cmd>:diffget LOCAL<CR>', "Select the current changes" },
+    ["2"] = { '<cmd>:diffget BASE<CR>', "Select none of the changes" },
+    ["3"] = { '<cmd>:diffget REMOTE<CR>', "Select the incoming changes" },
 
     b = {
       name = "Buffers",
@@ -105,6 +108,10 @@ function M.setup()
       g = { "<cmd>Neogen func<Cr>", "Func Doc" },
       G = { "<cmd>Neogen class<Cr>", "Class Doc" },
       d = { "<cmd>DogeGenerate<Cr>", "Generate Doc" },
+      o = { "<cmd>GitConflictChooseOurs<Cr>", "Select the current changes" },
+      t = { "<cmd>GitConflictChooseTheirs<Cr>", "Select the incoming changes" },
+      b = { "<cmd>GitConflictChooseBoth<Cr>", "Select both changes" },
+      n = { "<cmd>GitConflictChooseNone<Cr>", "Select none of the changes" }
     },
 
     p = {

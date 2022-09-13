@@ -10,41 +10,17 @@ local with_diagnostics_code = function(builtin)
   }
 end
 
--- local with_root_file = function(builtin, file)
---   return builtin.with {
---     condition = function(utils)
---       return utils.root_has_file(file)
---     end,
---   }
--- end
-
 local sources = {
   -- formatting
-  -- b.formatting.prettierd,
-  -- b.formatting.shfmt,
-  -- b.formatting.shellharden,
-  -- b.formatting.fixjson,
-  -- b.formatting.black.with { extra_args = { "--fast" } },
-  -- b.formatting.isort,
-  -- b.formatting.stylua,
-  -- b.formatting.google_java_format,
-  -- with_root_file(b.formatting.stylua, "stylua.toml"),
+  b.formatting.prettier,
 
   -- diagnostics
   b.diagnostics.write_good,
-  -- b.diagnostics.markdownlint,
   b.diagnostics.eslint_d,
   b.diagnostics.flake8,
   b.diagnostics.tsc,
-  -- b.diagnostics.selene,
-  -- b.diagnostics.codespell,
-  -- with_root_file(b.diagnostics.selene, "selene.toml"),
   with_diagnostics_code(b.diagnostics.shellcheck),
   b.diagnostics.zsh,
-  -- b.diagnostics.cspell.with {
-  --   filetypes = { "python", "rust", "typescript" },
-  -- },
-  -- b.diagnostics.stylelint,
 
   -- code actions
   b.code_actions.gitsigns.with {

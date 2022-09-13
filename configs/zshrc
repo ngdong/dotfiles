@@ -30,7 +30,7 @@
   MODE_INDICATOR="%F{yellow}+%f"
 
 # Add wisely, as too many plugins slow down shell startup.
-  plugins=(git zsh-autosuggestions zsh-syntax-highlighting tmux vi-mode zoxide)
+  plugins=(git zsh-autosuggestions zsh-syntax-highlighting tmux vi-mode zoxide docker)
   source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -150,3 +150,8 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/home/zed/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
