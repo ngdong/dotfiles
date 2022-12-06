@@ -60,6 +60,7 @@ function M.setup()
     use {
       "folke/tokyonight.nvim",
       config = function()
+        vim.g.termguicolors = true
         vim.g.tokyonight_style = "night"
         vim.g.tokyonight_italic_functions = true
         vim.g.tokyonight_sidebars = { "qf", "vista_kind", "terminal", "packer" }
@@ -136,7 +137,8 @@ function M.setup()
         require("configs.treesitter").setup()
       end,
       requires = {
-        { "jose-elias-alvarez/nvim-lsp-ts-utils" },
+        "jose-elias-alvarez/nvim-lsp-ts-utils",
+        "nvim-treesitter/nvim-treesitter-textobjects"
       }
     }
 
@@ -172,9 +174,6 @@ function M.setup()
 
     -- Trailing whitespace highlighting & automatic fixing
     use { "bronson/vim-trailing-whitespace" }
-
-    -- Change and add such surroundings in pairs
-    use { "tpope/vim-surround" }
 
     -- IndentLine
     use {
@@ -244,11 +243,9 @@ function M.setup()
         "plenary.nvim",
         "popup.nvim",
         "telescope-fzf-native.nvim",
-        "telescope-project.nvim",
         "telescope-repo.nvim",
         "telescope-file-browser.nvim",
         "telescope-ui-select.nvim",
-        "project.nvim",
         "trouble.nvim",
         "telescope-dap.nvim",
         "telescope-frecency.nvim",
@@ -261,18 +258,10 @@ function M.setup()
         "nvim-lua/popup.nvim",
         "nvim-lua/plenary.nvim",
         { "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
-        "nvim-telescope/telescope-project.nvim",
         "cljoly/telescope-repo.nvim",
         "nvim-telescope/telescope-file-browser.nvim",
         "nvim-telescope/telescope-ui-select.nvim",
         { "nvim-telescope/telescope-frecency.nvim", requires = "tami5/sqlite.lua" },
-        -- Project settings
-        {
-          "ahmedkhalf/project.nvim",
-          config = function()
-            require("configs.project").setup()
-          end,
-        },
         "nvim-telescope/telescope-dap.nvim",
         {
           "AckslD/nvim-neoclip.lua",
@@ -297,11 +286,11 @@ function M.setup()
     use {
       "neovim/nvim-lspconfig",
       opt = true,
-      event = { "BufReadPre" },
+      event = { "BufReadPre", "BufEnter" },
       wants = {
         "nvim-lsp-installer",
         "cmp-nvim-lsp",
-        "lua-dev.nvim",
+        "neodev.nvim",
         "vim-illuminate",
         "null-ls.nvim",
         "schemastore.nvim",
@@ -314,7 +303,7 @@ function M.setup()
       requires = {
         -- Manage LSP servers
         "williamboman/nvim-lsp-installer",
-        "folke/lua-dev.nvim",
+        "folke/neodev.nvim",
         "RRethy/vim-illuminate",
         -- Formatters and linters
         "jose-elias-alvarez/null-ls.nvim",
@@ -380,6 +369,17 @@ function M.setup()
       end
     }
 
+    -- Change and add such surroundings in pairs
+    use { "kylechui/nvim-surround",
+      tag = "*",
+      requires = {
+        "nvim-treesitter/nvim-treesitter",
+        "nvim-treesitter/nvim-treesitter-textobjects"
+      },
+      config = function()
+        require("nvim-surround").setup({})
+      end
+    }
     -- Support use command Lspsaga with completion or use lua function
     use {
       "tami5/lspsaga.nvim",

@@ -67,3 +67,6 @@ keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
 -- Disabled to show command history
 keymap("n", "q:", "<Nop>", opts)
+
+-- Show list buffer
+keymap("n", ";", ":lua require('telescope.builtin').buffers()<CR>" , opts)

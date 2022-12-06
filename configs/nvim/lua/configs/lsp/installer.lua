@@ -1,6 +1,7 @@
 local M = {}
 
 function M.setup(servers, options)
+  require("neodev").setup({});
   local lspconfig = require "lspconfig"
   local icons = require "configs.icons"
 
@@ -20,10 +21,6 @@ function M.setup(servers, options)
   -- Set up LSP servers
   for server_name, _ in pairs(servers) do
     local opts = vim.tbl_deep_extend("force", options, servers[server_name] or {})
-
-    if server_name == "sumneko_lua" then
-      opts = require("lua-dev").setup { lspconfig = opts }
-    end
 
     if server_name == "rust_analyzer" then
       local extension_path = vim.fn.glob(vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-*/")

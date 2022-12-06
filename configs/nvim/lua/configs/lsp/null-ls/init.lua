@@ -5,27 +5,28 @@ local nls_utils = require "null-ls.utils"
 local b = nls.builtins
 
 local with_diagnostics_code = function(builtin)
-  return builtin.with {
+  return builtin.with({
     diagnostics_format = "#{m} [#{c}]",
-  }
+  })
 end
 
 local sources = {
   -- formatting
   b.formatting.prettier,
 
-  -- diagnostics
+  --  diagnostics
   b.diagnostics.write_good,
+  -- b.diagnostics.markdownlint,
   b.diagnostics.eslint_d,
   b.diagnostics.flake8,
   b.diagnostics.tsc,
-  with_diagnostics_code(b.diagnostics.shellcheck),
+  -- with_diagnostics_code(b.diagnostics.shellcheck),
   b.diagnostics.zsh,
 
   -- code actions
-  b.code_actions.gitsigns.with {
-    disabled_filetypes = { "NeogitCommitMessage" },
-  },
+  -- b.code_actions.gitsigns.with({
+  --   disabled_filetypes = { "NeogitCommitMessage" },
+  -- }),
   b.code_actions.eslint_d,
   b.code_actions.gitrebase,
   b.code_actions.refactoring,

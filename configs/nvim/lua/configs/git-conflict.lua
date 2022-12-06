@@ -6,7 +6,7 @@ vim.api.nvim_set_hl(0, "ConflictMarkerCommonAncestorsHunk", { bg = "#754a81" })
 
 function M.setup()
   require("git-conflict").setup({
-    default_mappings = true,
+    default_mappings = false,
     disable_diagnostics = false,
     highlights = {
       current = "ConflictMarkerOurs",

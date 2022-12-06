@@ -74,7 +74,6 @@ function M.setup()
       end,
     },
     mapping = {
-      -- ["<C-k>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
       ["<C-l>"] = cmp.mapping {
         i = function(fallback)
           if luasnip.choice_active() then
@@ -93,10 +92,11 @@ function M.setup()
           end
         end,
       },
-      -- ["<C-j>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
       ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
       ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-      ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+      ["<C-Space>"] = cmp.mapping(cmp.mapping.complete({
+        reason = cmp.ContextReason.Auto,
+      }), { "i", "c" }),
       ["<C-e>"] = cmp.mapping { i = cmp.mapping.close(), c = cmp.mapping.close() },
       ["<CR>"] = cmp.mapping {
         i = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false },
@@ -130,7 +130,7 @@ function M.setup()
           cmp.select_prev_item()
         elseif luasnip.jumpable(-1) then
           luasnip.jump(-1)
-        elseif neogen.jumpable(true) then
+        elseif neogen.jumpable(-1) then
           neogen.jump_prev()
         else
           fallback()
