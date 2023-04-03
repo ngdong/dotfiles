@@ -28,6 +28,7 @@ function M.format()
           and client.name ~= "html"
           and client.name ~= "sumneko_lua"
           and client.name ~= "jdt.ls"
+          and client.name ~= "rust_analyzer"
         -- and client.name ~= "kotlin_language_server"
       end,
     }

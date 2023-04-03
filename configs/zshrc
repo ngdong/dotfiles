@@ -59,16 +59,6 @@ fh() {
   print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
 }
 
-# fbr [FUZZY PATTERN] - Checkout specified branch
-# Include remote branches, sorted by most recent commit and limited to 30
-fgb() {
-  local branches branch
-  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
-  branch=$(echo "$branches" |
-           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
-  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
-}
-
 # tm [SESSION_NAME | FUZZY PATTERN] - create new tmux session, or switch to existing one.
 # Running `tm` will let you fuzzy-find a session mame
 # Passing an argument to `ftm` will switch to that session if it exists or create it otherwise
@@ -113,7 +103,7 @@ fgr() {
   alias top="vtop --theme=wizard"
   alias ls="colorls -lA --sd"
   alias clear_history='echo "" > ~/.zsh_history & exec $SHELL -l'
-  alias rmvs="rm -rf .session.vim"
+  alias gg="lazygit"
 
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
@@ -155,3 +145,11 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PNPM_HOME="/home/zed/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
+
+# Deno
+export DENO_INSTALL="/home/zed/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)

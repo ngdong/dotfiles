@@ -27,7 +27,7 @@ local servers = {
       },
     },
   },
-  sumneko_lua = {
+  lua_ls= {
     settings = {
       Lua = {
         runtime = {
@@ -68,6 +68,7 @@ local servers = {
   emmet_ls = {},
   marksman = {},
   angularls = {},
+  vls={},
 }
 
 function M.on_attach(client, bufnr)
@@ -92,9 +93,6 @@ function M.on_attach(client, bufnr)
   if client.server_capabilities.definitionProvider then
     vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
   end
-
-  -- aerial.nvim
-  require("aerial").on_attach(client, bufnr)
 
   -- nvim-navic
   if client.server_capabilities.documentSymbolProvider then

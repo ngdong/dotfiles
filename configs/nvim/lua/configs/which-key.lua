@@ -5,8 +5,8 @@ function M.setup()
 
   local setup = {
     plugins = {
-      marks = true, -- shows a list of your marks on ' and `
-      registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+      marks = false, -- shows a list of your marks on ' and `
+      registers = false, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
       spelling = {
         enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
         suggestions = 20, -- how many suggestions should be shown in the list?
@@ -127,7 +127,7 @@ function M.setup()
       name = "Replace",
       r = { "<cmd>lua require('spectre').open()<cr>", "Replace" },
       w = { "<cmd>lua require('spectre').open_visual({select_word=true})<cr>", "Replace Word" },
-      f = { "<cmd>lua require('spectre').open_file_search()<cr>", "Replace Buffer" },
+      f = { "<cmd>lua require('spectre').open_file_search({select_word=true})<cr>", "Replace Buffer" },
     },
 
     g = {
@@ -169,9 +169,7 @@ function M.setup()
     t = {
       name = "Terminal",
       n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
-      u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
-      t = { "<cmd>lua _HTOP_TOGGLE()<cr>", "Htop" },
-      p = { "<cmd>lua _PYTHON_TOGGLE()<cr>", "Python" },
+      g = { "<cmd>lua _LAZYGIT_TOGGLE()<cr>", "Lazygit" },
       f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
       h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
       v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },

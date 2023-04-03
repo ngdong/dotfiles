@@ -53,7 +53,7 @@ opt.smarttab = true
 opt.softtabstop = indent
 opt.synmaxcol = 240
 opt.path:append "**"
-opt.guifont = "monospace:h17" -- The font used in graphical neovim applications
+opt.guifont = "League Mono Narrow Regular:h12" -- The font used in graphical neovim applications
 -- opt.formatoptions:append "cqnj"
 -- opt.formatoptions:remove "ator2"
 

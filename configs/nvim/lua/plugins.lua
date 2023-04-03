@@ -142,6 +142,12 @@ function M.setup()
       }
     }
 
+    use {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      after = "nvim-treesitter",
+      requires = "nvim-treesitter/nvim-treesitter",
+    }
+
     -- Float terminals
     use {
       "akinsho/toggleterm.nvim",
@@ -153,6 +159,7 @@ function M.setup()
     -- A search panel for neovim.
     use {
       "windwp/nvim-spectre",
+      event = "BufRead",
       config = function()
         require("configs.spectre").setup()
       end
@@ -380,6 +387,7 @@ function M.setup()
         require("nvim-surround").setup({})
       end
     }
+
     -- Support use command Lspsaga with completion or use lua function
     use {
       "tami5/lspsaga.nvim",

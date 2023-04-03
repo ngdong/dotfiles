@@ -93,3 +93,7 @@ vim.api.nvim_exec(
 vim.cmd [[
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
 ]]
+-- Vlang
+vim.cmd [[
+  au BufNewFile,BufRead *.v set filetype=vlang
+]]
