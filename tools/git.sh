@@ -18,6 +18,9 @@ git config --global http.postBuffer 500M
 git config --global http.maxRequestBuffer 100M
 git config --global core.compression 0
 
+# Git config init main branch
+git config --global init.defaultBranch main
+
 # Set git to use the credential memory cache
 git config --global credential.helper cache
 git config --global credential.helper store

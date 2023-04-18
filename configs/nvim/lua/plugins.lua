@@ -58,14 +58,16 @@ function M.setup()
 
     -- Colorscheme
     use {
-      "folke/tokyonight.nvim",
+      "rebelot/kanagawa.nvim",
       config = function()
-        vim.g.termguicolors = true
-        vim.g.tokyonight_style = "night"
-        vim.g.tokyonight_italic_functions = true
-        vim.g.tokyonight_sidebars = { "qf", "vista_kind", "terminal", "packer" }
-        vim.g.tokyonight_colors = { hint = "orange", error = "#ff0000" }
-        vim.cmd [[colorscheme tokyonight]]
+        require("kanagawa").setup({
+          theme = "wave",
+          background = {
+            dark = "wave",
+            light = "lotus"
+          },
+        })
+        vim.cmd [[colorscheme kanagawa]]
       end
     }
 
@@ -79,15 +81,6 @@ function M.setup()
 
     -- Git
     use {
-      'TimUntersberger/neogit',
-      requires = {
-        "nvim-lua/plenary.nvim"
-      },
-      config = function()
-        require("neogit").setup()
-      end
-    }
-    use {
       "lewis6991/gitsigns.nvim",
       requires = {
         "nvim-lua/plenary.nvim"
@@ -97,18 +90,13 @@ function M.setup()
       end
     }
     use {
-      "tpope/vim-fugitive",
-      opt = true,
-      cmd = { "Git", "GBrowse", "Gdiffsplit", "Gvdiffsplit" },
-      requires = { "tpope/vim-rhubarb", "idanarye/vim-merginal" },
-    }
-    use {
       "akinsho/git-conflict.nvim",
       tag = "*",
       config = function()
         require("configs.git-conflict").setup()
       end
     }
+    
     -- Which key
     use {
       "folke/which-key.nvim",
@@ -119,13 +107,10 @@ function M.setup()
 
     -- Customized vim status line
     use {
-      "nvim-lualine/lualine.nvim",
+      "rebelot/heirline.nvim",
       event = "VimEnter",
-      requires = {
-        "kyazdani42/nvim-web-devicons"
-      },
       config = function()
-        require("configs.lualine").setup()
+        require("configs.heirline").setup()
       end
     }
 
@@ -166,14 +151,6 @@ function M.setup()
     }
 
     -- Buffer line
-    use {
-      "akinsho/bufferline.nvim",
-      config = function()
-        vim.opt.termguicolors = true
-        require("configs.bufferline").setup()
-      end
-    }
-
     use {
       "kazhala/close-buffers.nvim",
       cmd = { "BDelete", "BWipeout" },
