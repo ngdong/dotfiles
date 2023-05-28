@@ -10,5 +10,14 @@
       "println!(\"${1:value}\");"
     ],
     "description": "println"
+  },
+  "pubasyncfn": {
+    "prefix": "pasf",
+    "body": [
+      "pub async fn ${1:first}() -> ${2:second} {",
+      "\t${3:third}",
+      "}"
+    ],
+    "description": "Public async function"
   }
 }

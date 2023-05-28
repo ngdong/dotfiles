@@ -149,7 +149,3 @@ export PATH="$PNPM_HOME:$PATH"
 # Deno
 export DENO_INSTALL="/home/zed/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
-
-
-# Load Angular CLI autocompletion.
-source <(ng completion script)

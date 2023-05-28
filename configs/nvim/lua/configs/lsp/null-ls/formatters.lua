@@ -26,9 +26,9 @@ function M.format()
         return client.name ~= "tsserver"
           and client.name ~= "jsonls"
           and client.name ~= "html"
-          and client.name ~= "sumneko_lua"
+          and client.name ~= "lua_ls"
           and client.name ~= "jdt.ls"
-          and client.name ~= "rust_analyzer"
+        -- and client.name ~= "rust_analyzer"
         -- and client.name ~= "kotlin_language_server"
       end,
     }
@@ -39,7 +39,7 @@ end
 function M.setup(client, buf)
   local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
 
-  local enable = false
+  local enable = true
   if M.has_formatter(filetype) then
     enable = client.name == "null-ls"
   else

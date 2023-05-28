@@ -29,7 +29,7 @@ local servers = {
       },
     },
   },
-  lua_ls= {
+  sumneko_lua = {
     settings = {
       Lua = {
         runtime = {

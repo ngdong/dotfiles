@@ -1,158 +1,200 @@
-_G.dump = function(...)
-  print(vim.inspect(...))
-end
-
-_G.prequire = function(...)
-  local status, lib = pcall(require, ...)
-  if status then
-    return lib
-  end
-  return nil
-end
-
-local max = math.max
-local min = math.min
 local M = {}
 
-M.separators = {
-  vertical_bar = '┃',
-  vertical_bar_thin = '│',
-  left = '',
-  right = '',
-  block = '█',
-  left_filled = '',
-  right_filled = '',
-  slant_left = '',
-  slant_left_thin = '',
-  slant_right = '',
-  slant_right_thin = '',
-  slant_left_2 = '',
-  slant_left_2_thin = '',
-  slant_right_2 = '',
-  slant_right_2_thin = '',
-  left_rounded = '',
-  left_rounded_thin = '',
-  right_rounded = '',
-  right_rounded_thin = '',
-  circle = '●',
-  github_icon = " ﯙ ",
-  folder_icon = " ",
-  ghost = ''
-}
+M.root_patterns = { ".git", "lua" }
 
--- Converts the given hex color to normalized rgba
-function hex2rgb (hex)
-  print( 'hex:', hex )
-  local hex = hex:gsub("#","")
-  if hex:len() == 3 then
-    return (tonumber("0x"..hex:sub(1,1))*17)/255, (tonumber("0x"..hex:sub(2,2))*17)/255, (tonumber("0x"..hex:sub(3,3))*17)/255
-  else
-    return tonumber("0x"..hex:sub(1,2))/255, tonumber("0x"..hex:sub(3,4))/255, tonumber("0x"..hex:sub(5,6))/255
-  end
+---@param on_attach fun(client, buffer)
+function M.on_attach(on_attach)
+	vim.api.nvim_create_autocmd("LspAttach", {
+		callback = function(args)
+			local buffer = args.buf
+			local client = vim.lsp.get_client_by_id(args.data.client_id)
+			on_attach(client, buffer)
+		end,
+	})
+end
+
+---@param plugin string
+function M.has(plugin)
+	return require("lazy.core.config").plugins[plugin] ~= nil
+end
+
+---@param fn fun()
+function M.on_very_lazy(fn)
+	vim.api.nvim_create_autocmd("User", {
+		pattern = "VeryLazy",
+		callback = function()
+			fn()
+		end,
+	})
+end
+
+-- returns the root directory based on:
+-- * lsp workspace folders
+-- * lsp root_dir
+-- * root pattern of filename of the current buffer
+-- * root pattern of cwd
+---@return string
+function M.get_root()
+	---@type string?
+	local path = vim.api.nvim_buf_get_name(0)
+	path = path ~= "" and vim.loop.fs_realpath(path) or nil
+	---@type string[]
+	local roots = {}
+	if path then
+		for _, client in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
+			local workspace = client.config.workspace_folders
+			local paths = workspace
+					and vim.tbl_map(function(ws)
+						return vim.uri_to_fname(ws.uri)
+					end, workspace)
+				or client.config.root_dir and { client.config.root_dir }
+				or {}
+			for _, p in ipairs(paths) do
+				local r = vim.loop.fs_realpath(p)
+				if path:find(r, 1, true) then
+					roots[#roots + 1] = r
+				end
+			end
+		end
+	end
+	table.sort(roots, function(a, b)
+		return #a > #b
+	end)
+	---@type string?
+	local root = roots[1]
+	if not root then
+		path = path and vim.fs.dirname(path) or vim.loop.cwd()
+		---@type string?
+		root = vim.fs.find(M.root_patterns, { path = path, upward = true })[1]
+		root = root and vim.fs.dirname(root) or vim.loop.cwd()
+	end
+	---@cast root string
+	return root
+end
+
+-- this will return a function that calls telescope.
+-- cwd will default to utils.get_root
+-- for `files`, git_files or find_files will be chosen depending on .git
+function M.telescope(builtin, opts)
+	local params = { builtin = builtin, opts = opts }
+	return function()
+		builtin = params.builtin
+		opts = params.opts
+		opts = vim.tbl_deep_extend("force", { cwd = M.get_root() }, opts or {})
+		if builtin == "files" then
+			if vim.loop.fs_stat((opts.cwd or vim.loop.cwd()) .. "/.git") then
+				opts.show_untracked = true
+				builtin = "git_files"
+			else
+				builtin = "find_files"
+			end
+		end
+		require("telescope.builtin")[builtin](opts)
+	end
+end
+
+function M.lsp_get_config(server)
+	local configs = require("lspconfig.configs")
+	return rawget(configs, server)
+end
+
+-- Opens a floating terminal (interactive by default)
+---@param cmd? string[]|string
+---@param opts? LazyCmdOptions|{interactive?:boolean, esc_esc?:false}
+function M.float_term(cmd, opts)
+	opts = vim.tbl_deep_extend("force", {
+		size = { width = 0.9, height = 0.9 },
+	}, opts or {})
+	local float = require("lazy.util").float_term(cmd, opts)
+	if opts.esc_esc == false then
+		vim.keymap.set("t", "<esc>", "<esc>", { buffer = float.buf, nowait = true })
+	end
+end
+
+---@param silent boolean?
+---@param values? {[1]:any, [2]:any}
+function M.toggle(option, silent, values)
+	if values then
+		if vim.opt_local[option]:get() == values[1] then
+			vim.opt_local[option] = values[2]
+		else
+			vim.opt_local[option] = values[1]
+		end
+		return M.info("Set " .. option .. " to " .. vim.opt_local[option]:get(), { title = "Option" })
+	end
+	vim.opt_local[option] = not vim.opt_local[option]:get()
+	if not silent then
+		if vim.opt_local[option]:get() then
+			M.info("Enabled " .. option, { title = "Option" })
+		else
+			M.warn("Disabled " .. option, { title = "Option" })
+		end
+	end
+end
+
+local enabled = true
+function M.toggle_diagnostics()
+	enabled = not enabled
+	if enabled then
+		vim.diagnostic.enable()
+		M.info("Enabled diagnostics", { title = "Diagnostics" })
+	else
+		vim.diagnostic.disable()
+		M.warn("Disabled diagnostics", { title = "Diagnostics" })
+	end
+end
+
+---@param name string
+function M.opts(name)
+	local plugin = require("lazy.core.config").plugins[name]
+	if not plugin then
+		return {}
+	end
+	local Plugin = require("lazy.core.plugin")
+	return Plugin.values(plugin, "opts", false)
 end
 
 function M.t(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
+	return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
 function M.exists(list, val)
-  local set = {}
-  for _, l in ipairs(list) do
-    set[l] = true
-  end
-  return set[val]
+	local set = {}
+	for _, l in ipairs(list) do
+		set[l] = true
+	end
+	return set[val]
 end
 
 function M.log(msg, hl, name)
-  name = name or "Neovim"
-  hl = hl or "Todo"
-  vim.api.nvim_echo({ { name .. ": ", hl }, { msg } }, true, {})
+	name = name or "Neovim"
+	hl = hl or "Todo"
+	vim.api.nvim_echo({ { name .. ": ", hl }, { msg } }, true, {})
 end
 
 function M.warn(msg, name)
-  vim.notify(msg, vim.log.levels.WARN, { title = name })
+	vim.notify(msg, vim.log.levels.WARN, { title = name })
 end
 
 function M.error(msg, name)
-  vim.notify(msg, vim.log.levels.ERROR, { title = name })
+	vim.notify(msg, vim.log.levels.ERROR, { title = name })
 end
 
 function M.info(msg, name)
-  vim.notify(msg, vim.log.levels.INFO, { title = name })
+	vim.notify(msg, vim.log.levels.INFO, { title = name })
 end
 
 function M.is_empty(s)
-  return s == nil or s == ""
+	return s == nil or s == ""
 end
 
 function M.get_buf_option(opt)
-  local status_ok, buf_option = pcall(vim.api.nvim_buf_get_option, 0, opt)
-  if not status_ok then
-    return nil
-  else
-    return buf_option
-  end
+	local status_ok, buf_option = pcall(vim.api.nvim_buf_get_option, 0, opt)
+	if not status_ok then
+		return nil
+	else
+		return buf_option
+	end
 end
-
-function M.quit()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local modified = vim.api.nvim_buf_get_option(bufnr, "modified")
-  if modified then
-    vim.ui.input({
-      prompt = "You have unsaved changes. Quit anyway? (y/n) ",
-    }, function(input)
-      if input == "y" then
-        vim.cmd "q!"
-      end
-    end)
-  else
-    vim.cmd "q!"
-  end
-end
-
--- Lightens a given hex color by the specified amount
-function M.lighten(color, amount)
-  local r, g, b
-  r, g, b = hex2rgb(color)
-  r = 255 * r
-  g = 255 * g
-  b = 255 * b
-  r = r + floor(2.55 * amount)
-  g = g + floor(2.55 * amount)
-  b = b + floor(2.55 * amount)
-  r = r > 255 and 255 or r
-  g = g > 255 and 255 or g
-  b = b > 255 and 255 or b
-  return ("#%02x%02x%02x"):format(r, g, b)
-end
-
--- Darkens a given hex color by the specified amount
-function M.darken(color, amount)
-  local r, g, b
-  r, g, b = hex2rgb(color)
-  r = 255 * r
-  g = 255 * g
-  b = 255 * b
-  r = max(0, r - floor(r * (amount / 100)))
-  g = max(0, g - floor(g * (amount / 100)))
-  b = max(0, b - floor(b * (amount / 100)))
-  return ("#%02x%02x%02x"):format(r, g, b)
-end
-
-function M.is_zen() return vim.env.NVIMZEN == "1" end
-
--- function M.nvim_version(val)
---   local version = (vim.version().major .. "." .. vim.version().minor) + 0.0
---   val = val or 0.7
---   if version >= val then
---     return true
---   else
---     return false
---   end
--- end
---
--- function M.nvim_nightly()
---   return M.nvim_version(0.7)
--- end
 
 return M

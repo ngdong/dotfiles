@@ -1,12 +1,15 @@
 local indent = 2
-local api = vim.api
 local g = vim.g
 local opt = vim.opt
 local cmd = vim.cmd
 
-cmd [[filetype plugin indent on]]
-cmd [[syntax enable]]
-
+cmd([[filetype plugin indent on]])
+cmd([[syntax enable]])
+-- Set <space> as the leader key
+-- See `:help mapleader`
+--  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+g.mapleader = " "
+g.maplocalleader = " "
 opt.termguicolors = true -- Enable colors in terminal
 opt.hlsearch = true -- Set highlight on search
 opt.number = true -- Make line numbers default
@@ -52,25 +55,25 @@ opt.sidescrolloff = 999
 opt.smarttab = true
 opt.softtabstop = indent
 opt.synmaxcol = 240
-opt.path:append "**"
+opt.path:append("**")
 opt.guifont = "Fira Code Regular:h12" -- The font used in graphical neovim applications
 -- opt.formatoptions:append "cqnj"
 -- opt.formatoptions:remove "ator2"
 
 opt.wildignorecase = true
-opt.wildignore:append "**/node_modules/*"
-opt.wildignore:append "**/.git/*"
+opt.wildignore:append("**/node_modules/*")
+opt.wildignore:append("**/.git/*")
 
 opt.formatoptions = opt.formatoptions
-    - "a" -- Auto formatting is BAD.
-    - "t" -- Don't auto format my code. I got linters for that.
-    + "c" -- In general, I like it when comments respect textwidth
-    + "q" -- Allow formatting comments w/ gq
-    - "o" -- O and o, don't continue comments
-    - "r" -- Don't insert comment after <Enter>
-    + "n" -- Indent past the formatlistpat, not underneath it.
-    + "j" -- Auto-remove comments if possible.
-    - "2" -- I'm not in gradeschool anymore
+	- "a" -- Auto formatting is BAD.
+	- "t" -- Don't auto format my code. I got linters for that.
+	+ "c" -- In general, I like it when comments respect textwidth
+	+ "q" -- Allow formatting comments w/ gq
+	- "o" -- O and o, don't continue comments
+	- "r" -- Don't insert comment after <Enter>
+	+ "n" -- Indent past the formatlistpat, not underneath it.
+	+ "j" -- Auto-remove comments if possible.
+	- "2" -- I'm not in gradeschool anymore
 
 -- g.virtualedit = "all"
 g.vim_markdown_fenced_languages = { "html", "javascript", "typescript", "css", "python", "lua", "vim" }

@@ -1,0 +1,238 @@
+-- ============================================================================
+-- ===                               PLUGINS                                ===
+-- ============================================================================
+return {}
+
+-- function M.setup()
+
+--   local function plugins(use)
+--     -- Trailing whitespace highlighting & automatic fixing
+--     { "bronson/vim-trailing-whitespace" }
+
+--     -- Comment function
+--     {
+--       "numToStr/Comment.nvim",
+--       requires = {
+--         "JoosepAlviste/nvim-ts-context-commentstring"
+--       },
+--       config = function()
+--         require("configs.comment").setup()
+--       end
+--     }
+
+--     -- Code documentation
+--     {
+--       "danymat/neogen",
+--       config = function()
+--         require("configs.neogen").setup()
+--       end,
+--       cmd = { "Neogen" },
+--       module = "neogen"
+--     }
+
+--     {
+--       "kkoomen/vim-doge",
+--       run = ":call doge#install()",
+--       config = function()
+--         require("configs.doge").setup()
+--       end,
+--       cmd = { "DogeGenerate", "DogeCreateDocStandard" }
+--     }
+
+--     -- LSP
+--     {
+--       "neovim/nvim-lspconfig",
+--       opt = true,
+--       event = { "BufReadPre", "BufEnter" },
+--       wants = {
+--         "nvim-lsp-installer",
+--         "cmp-nvim-lsp",
+--         "neodev.nvim",
+--         "vim-illuminate",
+--         "null-ls.nvim",
+--         "nvim-navic",
+--         "schemastore.nvim",
+--         "typescript.nvim",
+--         "simrat39/rust-tools.nvim",
+--       },
+--       config = function()
+--         require("configs.lsp").setup()
+--       end,
+--       requires = {
+--         -- Manage LSP servers
+--         "williamboman/nvim-lsp-installer",
+--         "folke/neodev.nvim",
+--         "RRethy/vim-illuminate",
+--         -- Formatters and linters
+--         "jose-elias-alvarez/null-ls.nvim",
+--         {
+--           "j-hui/fidget.nvim",
+--           config = function()
+--             require("fidget").setup {}
+--           end,
+--         },
+--         -- JSON Schema
+--         "b0o/schemastore.nvim",
+--         "jose-elias-alvarez/typescript.nvim",
+--         {
+--           "SmiteshP/nvim-navic",
+--           config = function()
+--             require("nvim-navic").setup {}
+--           end,
+--         }
+--       }
+--     }
+
+--     -- Completions plugins
+--     {
+--       "hrsh7th/nvim-cmp",
+--       event = "InsertEnter",
+--       opt = true,
+--       config = function()
+--         require("configs.cmp").setup()
+--       end,
+--       wants = { "LuaSnip" },
+--       requires = {
+--         "hrsh7th/cmp-buffer",
+--         "hrsh7th/cmp-path",
+--         "hrsh7th/cmp-nvim-lua",
+--         "ray-x/cmp-treesitter",
+--         "hrsh7th/cmp-cmdline",
+--         "saadparwaiz1/cmp_luasnip",
+--         "hrsh7th/cmp-nvim-lsp",
+--         -- Show function signature when typing
+--         "hrsh7th/cmp-nvim-lsp-signature-help",
+--         -- Snippets
+--         {
+--           "L3MON4D3/LuaSnip",
+--           wants = { "friendly-snippets", "vim-snippets" },
+--           config = function()
+--             require("configs.snip").setup()
+--           end
+--         },
+--         "rafamadriz/friendly-snippets",
+--         "honza/vim-snippets",
+--       }
+--     }
+
+--     -- Auto pairs
+--     {
+--       "windwp/nvim-autopairs",
+--       opt = true,
+--       event = "InsertEnter",
+--       wants = "nvim-treesitter",
+--       module = { "nvim-autopairs.completion.cmp", "nvim-autopairs" },
+--       config = function()
+--         require("configs.autopairs").setup()
+--       end
+--     }
+
+--     -- Change and add such surroundings in pairs
+--     { "kylechui/nvim-surround",
+--       tag = "*",
+--       requires = {
+--         "nvim-treesitter/nvim-treesitter",
+--         "nvim-treesitter/nvim-treesitter-textobjects"
+--       },
+--       config = function()
+--         require("nvim-surround").setup({})
+--       end
+--     }
+
+--     -- Support ,command Lspsaga with completion or ,lua function
+--     {
+--       "tami5/lspsaga.nvim",
+--       config = function()
+--         require("lspsaga").setup()
+--       end
+--     }
+
+--     {
+--       "Saecki/crates.nvim",
+--       event = { "BufRead Cargo.toml" },
+--       config = function()
+--         require("crates").setup {
+--           null_ls = {
+--             enabled = true,
+--             name = "crates.nvim",
+--           },
+--         }
+--       end
+--     }
+
+--     -- Debugging
+--     {
+--       "mfussenegger/nvim-dap",
+--       opt = true,
+--       keys = { [[<leader>d]] },
+--       module = { "dap" },
+--       wants = { "nvim-dap-virtual-text", "DAPInstall.nvim", "nvim-dap-ui", "nvim-dap-python", "which-key.nvim" },
+--       requires = {
+--         "alpha2phi/DAPInstall.nvim",
+--         "theHamsta/nvim-dap-virtual-text",
+--         "rcarriga/nvim-dap-ui",
+--         "mfussenegger/nvim-dap-python",
+--         "nvim-telescope/telescope-dap.nvim",
+--         { "jbyuki/one-small-step-for-vimkind", module = "osv" },
+--       },
+--       config = function()
+--         require("configs.dap").setup()
+--       end
+--     }
+
+--     -- Utils
+--     -- Rename
+--     {
+--       "filipdutescu/renamer.nvim",
+--       module = { "renamer" },
+--       config = function()
+--         require("renamer").setup {}
+--       end
+--     }
+
+--     -- Trouble
+--     {
+--       "folke/trouble.nvim",
+--       wants = "nvim-web-devicons",
+--       cmd = { "TroubleToggle", "Trouble" },
+--       config = function()
+--         require("trouble").setup {
+--           use_diagnostic_signs = true,
+--         }
+--       end
+--     }
+
+--     -- Refactoring
+--     {
+--       "ThePrimeagen/refactoring.nvim",
+--       module = { "refactoring", "telescope" },
+--       keys = { [[<leader>r]] },
+--       wants = { "telescope.nvim" },
+--       config = function()
+--         require("configs.refactoring").setup()
+--       end
+--     }
+
+--     -- Performance
+--     { "dstein64/vim-startuptime", cmd = "StartupTime" }
+
+--     -- Testing
+--     { "diepm/vim-rest-console", ft = { "rest" } }
+
+--     if packer_bootstrap then
+--       print "Setting up Neovim. Restart required after installation!"
+--       require("packer").sync()
+--     end
+--   end
+
+--   -- Init and start packer
+--   packer_init()
+
+--   -- Performance
+--   pcall(require, "impatient")
+
+--   require("packer").init(conf)
+--   require("packer").startup(plugins)
+-- end
+
+-- return M
