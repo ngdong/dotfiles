@@ -74,6 +74,9 @@ map("i", ";", ";<c-g>u")
 map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 map("n", "<leader>w", "<cmd>w!<cr>", { desc = "Save" })
 
+-- quit insert mode
+map("i", "<C-[", "<esc>")
+
 -- better indenting
 map("v", "<", "<gv")
 map("v", ">", ">gv")

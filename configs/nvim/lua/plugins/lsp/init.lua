@@ -75,13 +75,30 @@ return {
 					},
 				},
 				tsserver = { disable_formatting = true },
-				yamlls = {},
+				yamlls = {
+					settings = {
+						yaml = {
+							keyOrdering = false,
+						},
+					},
+				},
 				dockerls = {},
 				graphql = {},
 				bashls = {},
 				emmet_ls = {},
 				marksman = {},
 				angularls = {},
+				tailwindcss = {
+					settings = {
+						tailwindCSS = {
+							experimental = {
+								classRegex = {
+									{ "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
+								},
+							},
+						},
+					},
+				},
 			},
 			-- you can do any additional lsp server setup here
 			-- return true if you don't want this server to be setup with lspconfig
@@ -219,7 +236,7 @@ return {
 				"stylua",
 				"shfmt",
 				"prettierd",
-				"eslint_d"
+				"eslint_d",
 				-- "flake8",
 			},
 		},
